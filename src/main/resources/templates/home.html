@@ -1,0 +1,120 @@
+# home.html 
+
+<!DOCTYPE html> 
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	  xmlns:th="http://www.thymeleaf.org" 
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+	  layout:decorate="~{layout/default_layout}"> 
+	 
+	  <th:block layout:fragment="head">
+	  	
+	  		<title>Spring Boot</title> 
+	  		
+	  		<!--/* 이 영역에 공통으로 사용할 css, js library를 선언한다. */--> 
+	  		<link th:href="@{/css/common.css}" rel="stylesheet" /> 
+	  </th:block> 
+	  <body> 
+	  		<th:block layout:fragment="header" th:include="@{header}"></th:block> 
+	  		
+	  		<div layout:fragment="content" class="content"> 
+	  			<h2>This is Content</h2> 
+	  			<hr> 
+	  			<!-- 아래의 코드를 추가 합니다.--> 
+	  			<table border="1"> 
+	  				<tr> 
+	  					<th>id</th>
+	  					<th>값</th> 
+	  				</tr> 
+	  				<th:block th:each="rl : ${resultList}"> 
+	  					<tr> 
+	  						<td th:text="${rl.value.id}"></td>
+	  						<td th:text="${rl.value.name}"></td> 
+	  					</tr> 
+	  				</th:block> 
+	  			</table> 
+	  			
+	  		</div> 
+	  		<div style="text-align: center;">
+	  			<input type="text" id="idInput">
+	  			<input type="text" id="nameInput">
+	  			<button id="confirmBtn">데이터베이스 생성</button>
+	  			<button id="updateBtn">정보 갱신</button>
+	  		</div>
+	  		<div style="text-align: center;">
+	  			<input type="text" id="deleteInput">
+	  			<button id="userDeleteBtn">회원 삭제</button>
+	  		</div>
+	  		<th:block layout:fragment="footer" th:include="@{footer}"></th:block> 
+	  	</body> 
+	  	//[{}] 표현식으로 서버 데이터를 스크립트영역에 표현할 수 있음 예시 json 형식
+	  	//jquery 적용 하는 방법은 직접 다운로드하는 방식과 CDN으로 URL을 넣어서 적용시키는 방법이 있다
+	  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	  	<script th:inline="javascript">
+	  	
+		  	//click = 속성 같은 거임
+		  	$("#updateBtn").on('click', function() {
+				id = $("#idInput").val(); //abc
+				name = $("#nameInput").val(); //최태영
+				
+				data = {
+					id : id,
+					name : name
+				}
+				
+				$.ajax({
+					type:'POST',
+					url:'/rest/user/update',
+					contentType:'application/json',
+					data: JSON.stringify(data),
+					success: function(data){
+						location.reload();
+					},
+					error:function(){
+						
+					}
+				})
+	 		})
+		  	$("#userDeleteBtn").on('click', function() {
+				id = $("#deleteInput").val(); //abc
+				
+				data = {
+					id : id,
+				}
+				
+				$.ajax({
+					type:'POST',
+					url:'/rest/user/delete',
+					contentType:'application/json',
+					data: JSON.stringify(data),
+					success: function(data){
+						location.reload();
+					},
+					error:function(){
+						
+					}
+				})
+	 		})
+		  	$("#confirmBtn").on('click', function() {
+				id = $("#idInput").val(); //abc
+				password = $("#nameInput").val(); //123
+				
+				data = {
+					id : id,
+					name : name
+				}
+				
+				$.ajax({
+					type:'POST',
+					url:'/rest/user/add',
+					contentType:'application/json',
+					data: JSON.stringify(data),
+					success: function(data){
+						location.reload();
+					},
+					error:function(){
+						
+					}
+				})
+	 		})
+	  	</script>
+</html>
